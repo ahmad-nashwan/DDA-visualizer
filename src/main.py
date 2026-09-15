@@ -17,6 +17,12 @@ def draw_cursor(screen):
     x, y = pygame.mouse.get_pos()
     pygame.draw.circle(screen, pygame.Color("green"), (x, y), 8)
 
+def draw_line_of_sight(screen, player: Player):
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    player_x = player.pos.x * CELL_SIZE
+    player_y = player.pos.y * CELL_SIZE
+    pygame.draw.line(screen, pygame.Color("white"), (player_x, player_y), (mouse_x, mouse_y), 1)
+
 def start_visualization(game_map):
     pygame.init()
     screen = pygame.display.set_mode((1024, 600))
@@ -42,8 +48,9 @@ def start_visualization(game_map):
             player.move(game_map, Direction.RIGHT, velocity)
 
         draw_grid(screen, game_map.grid)
-        draw_player(screen, player)
         draw_cursor(screen)
+        draw_line_of_sight(screen, player)
+        draw_player(screen, player)
         pygame.display.update()
         clock.tick(60)  
 
