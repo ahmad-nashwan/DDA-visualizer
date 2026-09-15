@@ -29,7 +29,7 @@ class GameMap:
         y = math.floor(y)
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
             return True
-        if self.grid[x, y] == 1:
+        if self.grid[x][y] == 1:
             return True
         return False
 
