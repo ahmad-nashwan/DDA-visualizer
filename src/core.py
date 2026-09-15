@@ -1,5 +1,7 @@
 import math
 
+CELL_SIZE = 32
+
 class Vec2D:
     def __init__(self, x, y):
         self.x = x
