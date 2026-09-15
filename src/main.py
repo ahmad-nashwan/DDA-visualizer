@@ -26,22 +26,21 @@ def start_visualization(game_map):
     player = Player(Vec2D(8, 7))
     pygame.mouse.set_visible(False)
 
-    velocity = 0.5
+    velocity = 0.09
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    player.move(game_map,Direction.UP ,velocity)
-                if event.key == pygame.K_a:
-                    player.move(game_map, Direction.LEFT, velocity)
-                if event.key == pygame.K_s:
-                    player.move(game_map, Direction.DOWN, velocity)
-                    print("mow")
-                if event.key == pygame.K_d:
-                    player.move(game_map, Direction.RIGHT, velocity)
-        
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            player.move(game_map,Direction.UP ,velocity)
+        if keys[pygame.K_a]:
+            player.move(game_map, Direction.LEFT, velocity)
+        if keys[pygame.K_s]:
+            player.move(game_map, Direction.DOWN, velocity)
+        if keys[pygame.K_d]:
+            player.move(game_map, Direction.RIGHT, velocity)
+
         draw_grid(screen, game_map.grid)
         draw_player(screen, player)
         draw_cursor(screen)
