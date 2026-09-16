@@ -11,6 +11,9 @@ class Vec2D:
     def __add__(self, other):
         return Vec2D(self.x + other.x, self.y + other.y)
 
+    def __sub__(self, other):
+        return Vec2D(self.x - other.x, self.y - other.y)
+
     def __mul__(self, other):
         return Vec2D(self.x * other.x, self.y * other.y)
 
@@ -20,6 +23,9 @@ class Vec2D:
     
     def scale(self, scaler):
         return Vec2D(self.x * scaler, self.y * scaler)
+
+    def get_int(self):
+        return Vec2D(math.floor(self.x), math.floor(self.y))
 
 class Direction(Enum):
     # (x, y) -> according to pygame
