@@ -8,6 +8,10 @@ class Vec2D:
         self.x = x
         self.y = y
 
+    @classmethod
+    def from_tuple(cls, t: tuple):
+        return cls(t[0], t[1])
+
     def __add__(self, other):
         return Vec2D(self.x + other.x, self.y + other.y)
 
@@ -24,8 +28,19 @@ class Vec2D:
     def scale(self, scaler):
         return Vec2D(self.x * scaler, self.y * scaler)
 
-    def get_int(self):
+    def normalize(self):
+        length = math.sqrt(self.x ** 2 + self.y ** 2)
+        if length == 0:
+            return Vec2D(0, 0)
+        new_x = self.x / length
+        new_y = self.y / length
+        return Vec2D(new_x, new_y)
+
+    def get_floored(self):
         return Vec2D(math.floor(self.x), math.floor(self.y))
+
+    def to_tuple(self):
+        return (self.x, self.y)
 
 class Direction(Enum):
     # (x, y) -> according to pygame
