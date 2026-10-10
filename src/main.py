@@ -35,6 +35,10 @@ def set_starting_pos(game_map: GameMap):
         y = random.uniform(0, game_map.width - 1)
     return Vec2D(x, y)
 
+def set_player_dir(player: Player):
+    mouse_pos = Vec2D.from_tuple(pygame.mouse.get_pos()).scale(1 / CELL_SIZE)
+    player.dir = mouse_pos - player.pos
+
 def start_visualization(game_map):
     pygame.init()
     screen = pygame.display.set_mode((1024,640))
@@ -60,7 +64,9 @@ def start_visualization(game_map):
             player.move(game_map, Direction.RIGHT, velocity)
 
         draw_grid(screen, game_map.grid)
-        draw_line_of_sight(screen, player, dda(player, game_map, pygame.mouse.get_pos(), CELL_SIZE))
+        set_player_dir(player)
+        hit_point = dda(player, game_map)
+        draw_line_of_sight(screen, player, hit_point)
         draw_cursor(screen)
         draw_player(screen, player)
         pygame.display.update()

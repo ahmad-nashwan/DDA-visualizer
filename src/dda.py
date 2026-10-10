@@ -10,14 +10,11 @@ def sign(number):
     else:
         return 1
     
-def dda(player: Player, game_map: GameMap, mouse_tuple: tuple, cell_size):
+def dda(player: Player, game_map: GameMap):
     visited = []
     # store the current cell as visited
     visited.append(player.pos.get_floored().to_tuple())
-    # before doing anything, we link the direction with the cursor as a vector
-    mouse_pos = Vec2D.from_tuple(mouse_tuple).scale(1 / cell_size)
-    # how to get from player to mouse? subtraction
-    player.dir = mouse_pos - player.pos
+    
     # after that we must calculate the distance if y += 1 and if x += 1
     # if the denominator is zero this means we're moving in a perfect horizontal or vertical movement
     # bug 1 here
