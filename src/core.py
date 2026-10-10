@@ -1,7 +1,7 @@
 import math
 from enum import Enum
 
-CELL_SIZE = 32
+CELL_SIZE = 64
 
 class Vec2D:
     def __init__(self, x, y):
