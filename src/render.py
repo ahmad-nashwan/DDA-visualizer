@@ -11,7 +11,7 @@ class Camera:
 
     def update(self, player: Player, detailed_mode: bool):
         if detailed_mode:
-            self.scale = self.cell_size * 2
+            self.scale = self.cell_size * 3
             self.offset_x = (self.screen_width / 2) - (player.pos.x * self.scale)
             self.offset_y = (self.screen_height / 2) - (player.pos.y * self.scale)
         else:
@@ -21,3 +21,6 @@ class Camera:
 
     def to_pixels(self, x, y):
         return (x * self.scale + self.offset_x, y * self.scale + self.offset_y)
+
+    def to_grid(self, x, y):
+        return ((x - self.offset_x) / self.scale, (y - self.offset_y) / self.scale)
