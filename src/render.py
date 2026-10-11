@@ -1,9 +1,5 @@
 from core import Player
 
-SCREEN_WIDTH = 1024
-SCREEN_HEIGHT = 640
-CELL_SIZE = 64
-
 class Camera:
     def __init__(self, cell_size, screen_width, screen_height):
         self.cell_size = cell_size
