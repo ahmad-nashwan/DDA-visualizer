@@ -2,29 +2,34 @@ import pygame
 import random
 from core import Vec2D, GameMap, Player, Direction
 from dda import dda
-from render import Camera
+from render import Camera, BACKGROUND, FLOOR, GRID_LINE, WALL, WALL_EDGE, RAY, PLAYER, HIT_POINT, CURSOR
 
 def draw_grid(screen, camera: Camera, grid):
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             x, y = camera.to_pixels(col, row)
             rect = pygame.Rect(x, y, camera.scale, camera.scale)
-            pygame.draw.rect(screen, pygame.Color("white"), rect)
+            pygame.draw.rect(screen, GRID_LINE, rect)
             rect = pygame.Rect(x, y, camera.scale - 1, camera.scale - 1)
-            color = pygame.Color("blue") if grid[row][col] == 1 else pygame.Color("black")
+            color = WALL if grid[row][col] == 1 else FLOOR
             pygame.draw.rect(screen, color, rect)
+            if grid[row][col] == 1:
+                pygame.draw.rect(screen, WALL_EDGE, rect, 2)
 
 def draw_player(screen, camera: Camera, player: Player):
-    pygame.draw.circle(screen, pygame.Color("red"), camera.to_pixels(player.pos.x, player.pos.y), 8)
+    pygame.draw.circle(screen, PLAYER, camera.to_pixels(player.pos.x, player.pos.y), 8)
 
 def draw_cursor(screen):
     x, y = pygame.mouse.get_pos()
-    pygame.draw.circle(screen, pygame.Color("green"), (x, y), 8)
+    pygame.draw.circle(screen, CURSOR, (x, y), 8)
 
 def draw_line_of_sight(screen, camera: Camera, player: Player, position: tuple):
     x, y = camera.to_pixels(position[0], position[1])
     player_x, player_y = camera.to_pixels(player.pos.x, player.pos.y)
-    pygame.draw.line(screen, pygame.Color("white"), (player_x, player_y), (x, y), 1)
+    pygame.draw.line(screen, RAY, (player_x, player_y), (x, y), 1)
+
+def draw_hit_point(screen, camera: Camera, position: tuple):
+    pygame.draw.circle(screen, HIT_POINT, camera.to_pixels(position[0], position[1]), 5)
 
 def set_starting_pos(game_map: GameMap):
     x = random.uniform(0, game_map.width -1)
@@ -58,6 +63,10 @@ def start_visualization(game_map):
                 running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                 detailed_mode = not detailed_mode
+                if detailed_mode:
+                    velocity = 0.04
+                else:
+                    velocity = 0.08
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
             player.move(game_map,Direction.UP ,velocity)
@@ -69,11 +78,12 @@ def start_visualization(game_map):
             player.move(game_map, Direction.RIGHT, velocity)
 
         camera.update(player, detailed_mode)
-        screen.fill("black")
+        screen.fill(BACKGROUND)
         draw_grid(screen, camera, game_map.grid)
         set_player_dir(player, camera)
         hit_point = dda(player, game_map)
         draw_line_of_sight(screen, camera, player, hit_point)
+        draw_hit_point(screen, camera, hit_point)
         draw_cursor(screen)
         draw_player(screen, camera, player)
         pygame.display.set_caption("detailed" if detailed_mode else "free")

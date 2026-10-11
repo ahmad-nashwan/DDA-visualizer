@@ -1,4 +1,21 @@
+import pygame
 from core import Player
+
+# collor pallete
+BACKGROUND = pygame.Color("#16161e")
+FLOOR = pygame.Color("#1a1b26")
+GRID_LINE = pygame.Color("#292e42")
+WALL = pygame.Color("#3b4261")
+WALL_EDGE = pygame.Color("#565f89")
+VISITED = pygame.Color(125, 207, 255, 51)  # ray colour at 20% opacity
+RAY = pygame.Color("#7dcfff")
+PLAYER = pygame.Color("#7aa2f7")
+HIT_POINT = pygame.Color("#f7768e")
+CURSOR = pygame.Color("#9ece6a")
+CROSSING_X = pygame.Color("#ff9e64")
+CROSSING_Y = pygame.Color("#bb9af7")
+TEXT = pygame.Color("#c0caf5")
+LABEL = pygame.Color("#565f89")
 
 class Camera:
     def __init__(self, cell_size, screen_width, screen_height):
