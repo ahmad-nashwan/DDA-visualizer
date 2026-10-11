@@ -27,11 +27,11 @@ def draw_line_of_sight(screen, player: Player, position: tuple):
     pygame.draw.line(screen, pygame.Color("white"), (player_x, player_y), (x, y), 1)
 
 def set_starting_pos(game_map: GameMap):
-    x = random.uniform(0, game_map.height -1)
-    y = random.uniform(0, game_map.width - 1)
+    x = random.uniform(0, game_map.width -1)
+    y = random.uniform(0, game_map.height - 1)
     while game_map.is_wall(x, y):    
-        x = random.uniform(0, game_map.height -1)
-        y = random.uniform(0, game_map.width - 1)
+        x = random.uniform(0, game_map.width -1)
+        y = random.uniform(0, game_map.height - 1)
     return Vec2D(x, y)
 
 def set_player_dir(player: Player):
