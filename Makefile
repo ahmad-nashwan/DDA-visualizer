@@ -4,4 +4,4 @@ setup:
 	.venv/bin/pip install -r requirements.txt
 
 run:
-	.venv/bin/python src/visualization_loop.py
+	.venv/bin/python src/main.py
