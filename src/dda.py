@@ -17,6 +17,8 @@ def dda(player: Player, game_map: GameMap):
     # after that we must calculate the distance if y += 1 and if x += 1
     # if the denominator is zero this means we're moving in a perfect horizontal or vertical movement
     # bug 1 here
+    if player.dir.x == 0 and player.dir.y == 0:
+        return (player.pos.x, player.pos.y)
     if player.dir.y == 0:
         distBetweenRows = math.inf
     else:
