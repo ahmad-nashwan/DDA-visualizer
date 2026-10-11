@@ -1,5 +1,4 @@
 import pygame
-import math
 import random
 from core import Vec2D, GameMap, Player, Direction, CELL_SIZE
 from dda import dda
@@ -44,11 +43,12 @@ def start_visualization(game_map):
     screen = pygame.display.set_mode((1024,640))
     pygame.display.set_caption("DDA visualizer")
     clock = pygame.time.Clock()
-    running = True
     player = Player(set_starting_pos(game_map))
     pygame.mouse.set_visible(False)
-
     velocity = 0.09
+
+    running = True
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -72,7 +72,7 @@ def start_visualization(game_map):
         pygame.display.update()
         clock.tick(60)
 
-    pygame.QUIT
+    pygame.quit()
 
 def main():
     grid = [

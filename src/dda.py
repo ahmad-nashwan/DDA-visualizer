@@ -1,6 +1,5 @@
 import math
-from core import Vec2D, Player, GameMap
-
+from core import Player, GameMap
 
 def sign(number):
     if number == 0:
