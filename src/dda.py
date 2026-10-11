@@ -1,5 +1,13 @@
 import math
+from dataclasses import dataclass
 from core import Player, GameMap
+
+class RayResult:
+    def __init__(self, hit_point, hit_dist, first_distX, first_distY):
+        self.hit = hit_point
+        self.hit_dist = hit_dist
+        self.first_distX = first_distX
+        self.first_distY = first_distY
 
 def sign(number):
     if number == 0:
@@ -8,17 +16,13 @@ def sign(number):
         return -1
     else:
         return 1
-    
-def dda(player: Player, game_map: GameMap):
-    visited = []
-    # store the current cell as visited
-    visited.append(player.pos.get_floored().to_tuple())
-    
-    # after that we must calculate the distance if y += 1 and if x += 1
+
+def dda(player: Player, game_map: GameMap):    
+    # we must calculate the distance if y += 1 and if x += 1
     # if the denominator is zero this means we're moving in a perfect horizontal or vertical movement
     # bug 1 here
     if player.dir.x == 0 and player.dir.y == 0:
-        return (player.pos.x, player.pos.y)
+        return (RayResult((player.pos.x, player.pos.y), None, None, None))
     if player.dir.y == 0:
         distBetweenRows = math.inf
     else:
@@ -37,6 +41,9 @@ def dda(player: Player, game_map: GameMap):
         distY = fractional_pos.y * distBetweenRows
     else:
         distY = (1 - fractional_pos.y) * distBetweenRows
+    # lets capture the first intersection points so we can draw them...
+    first_distX = distX
+    first_distY = distY
     # the ray starts at the players position
     mapX = int(player.pos.x)
     mapY = int(player.pos.y)
@@ -53,8 +60,6 @@ def dda(player: Player, game_map: GameMap):
             mapX += stepX
             distX += distBetweenCols
             side = 0
-        visited.append((mapX, mapY))  
-
     if side is None:
         final_dest = 0
     elif side == 1:
@@ -64,4 +69,5 @@ def dda(player: Player, game_map: GameMap):
     normalized_dir = player.dir.normalize()
     hit_x = player.pos.x + (normalized_dir.x * final_dest)
     hit_y = player.pos.y + (normalized_dir.y * final_dest)
-    return (hit_x, hit_y)
+
+    return RayResult((hit_x, hit_y), final_dest, first_distX, first_distY)

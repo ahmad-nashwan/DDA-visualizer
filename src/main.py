@@ -1,35 +1,9 @@
 import pygame
 import random
+import render
 from core import Vec2D, GameMap, Player, Direction
-from dda import dda
-from render import Camera, BACKGROUND, FLOOR, GRID_LINE, WALL, WALL_EDGE, RAY, PLAYER, HIT_POINT, CURSOR
+from dda import dda, RayResult
 
-def draw_grid(screen, camera: Camera, grid):
-    for row in range(len(grid)):
-        for col in range(len(grid[row])):
-            x, y = camera.to_pixels(col, row)
-            rect = pygame.Rect(x, y, camera.scale, camera.scale)
-            pygame.draw.rect(screen, GRID_LINE, rect)
-            rect = pygame.Rect(x, y, camera.scale - 1, camera.scale - 1)
-            color = WALL if grid[row][col] == 1 else FLOOR
-            pygame.draw.rect(screen, color, rect)
-            if grid[row][col] == 1:
-                pygame.draw.rect(screen, WALL_EDGE, rect, 2)
-
-def draw_player(screen, camera: Camera, player: Player):
-    pygame.draw.circle(screen, PLAYER, camera.to_pixels(player.pos.x, player.pos.y), 8)
-
-def draw_cursor(screen):
-    x, y = pygame.mouse.get_pos()
-    pygame.draw.circle(screen, CURSOR, (x, y), 8)
-
-def draw_line_of_sight(screen, camera: Camera, player: Player, position: tuple):
-    x, y = camera.to_pixels(position[0], position[1])
-    player_x, player_y = camera.to_pixels(player.pos.x, player.pos.y)
-    pygame.draw.line(screen, RAY, (player_x, player_y), (x, y), 1)
-
-def draw_hit_point(screen, camera: Camera, position: tuple):
-    pygame.draw.circle(screen, HIT_POINT, camera.to_pixels(position[0], position[1]), 5)
 
 def set_starting_pos(game_map: GameMap):
     x = random.uniform(0, game_map.width -1)
@@ -39,23 +13,25 @@ def set_starting_pos(game_map: GameMap):
         y = random.uniform(0, game_map.height - 1)
     return Vec2D(x, y)
 
-def set_player_dir(player: Player, camera: Camera):
+
+def set_player_dir(player: Player, camera: render.Camera):
     x, y = pygame.mouse.get_pos()
     mouse_pos = Vec2D.from_tuple(camera.to_grid(x, y))
     player.dir = mouse_pos - player.pos
 
+
 def start_visualization(game_map):
     pygame.init()
-    camera = Camera(64, 1024, 640)
+    camera = render.Camera(64, 1024, 640)
     screen = pygame.display.set_mode((camera.screen_width, camera.screen_height))
     pygame.display.set_caption("DDA visualizer")
     clock = pygame.time.Clock()
     player = Player(set_starting_pos(game_map))
     pygame.mouse.set_visible(False)
-    velocity = 0.08
+    velocity = 0.02
 
     running = True
-    detailed_mode = False
+    detailed_mode = True
     camera.update(player, detailed_mode)
     while running:
         for event in pygame.event.get():
@@ -64,7 +40,7 @@ def start_visualization(game_map):
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                 detailed_mode = not detailed_mode
                 if detailed_mode:
-                    velocity = 0.04
+                    velocity = 0.02
                 else:
                     velocity = 0.08
         keys = pygame.key.get_pressed()
@@ -78,19 +54,24 @@ def start_visualization(game_map):
             player.move(game_map, Direction.RIGHT, velocity)
 
         camera.update(player, detailed_mode)
-        screen.fill(BACKGROUND)
-        draw_grid(screen, camera, game_map.grid)
+        screen.fill(render.BACKGROUND)
+        render.draw_grid(screen, camera, game_map.grid)
         set_player_dir(player, camera)
-        hit_point = dda(player, game_map)
-        draw_line_of_sight(screen, camera, player, hit_point)
-        draw_hit_point(screen, camera, hit_point)
-        draw_cursor(screen)
-        draw_player(screen, camera, player)
+        ray = dda(player, game_map)
+        render.draw_line_of_sight(screen, camera, player, ray.hit)
+        render.draw_hit_point(screen, camera, ray.hit)
+        render.draw_cursor(screen)
+        if detailed_mode and ray.first_distX:
+            render.draw_crossing(screen, camera, player, ray.first_distX, render.CROSSING_X)
+        if detailed_mode and ray.first_distX:
+            render.draw_crossing(screen, camera, player, ray.first_distY, render.CROSSING_Y)
+        render.draw_player(screen, camera, player)
         pygame.display.set_caption("detailed" if detailed_mode else "free")
         pygame.display.update()
         clock.tick(60)
 
     pygame.quit()
+
 
 def main():
     grid = [
