@@ -20,17 +20,6 @@ It starts from the player's position and calculates two distances: how far the r
 
 ## Instructions
 
-### Running it
-
-You need Python 3 and `make`.
-
-```
-make setup
-make run
-```
-
-That's all.
-
 ### Controls
 
 - `WASD` or arrows to move around
@@ -42,3 +31,14 @@ That's all.
 Free mode shows the whole map. Detailed mode zooms in on the player and shows the first two points DDA looks at: where the ray first crosses a vertical line, and where it first crosses a horizontal line. A crossing only shows up if the ray gets there before hitting a wall.
 
 The box in the corner tells you what each color means.
+
+### Running it
+
+You need Python 3 and `make`.
+
+```
+make setup
+make run
+```
+
+That's all.
