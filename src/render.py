@@ -96,14 +96,14 @@ def draw_crossing(screen, camera: Camera, player: Player, distance, color):
     pygame.draw.circle(screen, color, camera.to_pixels(x, y), 6)
 
 def create_font():
-    return pygame.font.SysFont("monospace", FONT_SIZE)
+    return pygame.font.SysFont("monospace", FONT_SIZE, bold=True)
 
 
 def draw_legend(screen, font, detailed_mode: bool):
     rows = [(PLAYER, "player"), (RAY, "ray")]
     if detailed_mode:
-        rows.append((CROSSING_X, "first crossing with a vertical line"))
-        rows.append((CROSSING_Y, "first crossing with a horizontal line"))
+        rows.append((CROSSING_X, "first intersection with a vertical line"))
+        rows.append((CROSSING_Y, "first intersection with a horizontal line"))
     rows.append((HIT_POINT, "where the ray hits a wall"))
     if detailed_mode:
         hint = "press T for free mode"
