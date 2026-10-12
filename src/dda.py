@@ -42,21 +42,25 @@ def dda(player: Player, game_map: GameMap):
     else:
         distY = (1 - fractional_pos.y) * distBetweenRows
     # lets capture the first intersection points so we can draw them...
-    first_distX = distX
-    first_distY = distY
     # the ray starts at the players position
+    first_distX = first_distY = None
     mapX = int(player.pos.x)
     mapY = int(player.pos.y)
+
     # Fix 2: Cache the step directions before the loop
     stepX = sign(player.dir.x)
     stepY = sign(player.dir.y)
     side = None
     while not game_map.is_wall(mapX, mapY):
         if distY < distX:
+            if first_distY is None:
+                first_distY = distY
             mapY += stepY
             distY += distBetweenRows
             side = 1
         else:
+            if first_distX is None:
+                first_distX = distX
             mapX += stepX
             distX += distBetweenCols
             side = 0

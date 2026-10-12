@@ -63,7 +63,7 @@ def start_visualization(game_map):
         render.draw_cursor(screen)
         if detailed_mode and ray.first_distX:
             render.draw_crossing(screen, camera, player, ray.first_distX, render.CROSSING_X)
-        if detailed_mode and ray.first_distX:
+        if detailed_mode and ray.first_distY:
             render.draw_crossing(screen, camera, player, ray.first_distY, render.CROSSING_Y)
         render.draw_player(screen, camera, player)
         pygame.display.set_caption("detailed" if detailed_mode else "free")
