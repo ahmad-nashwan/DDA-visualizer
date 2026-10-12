@@ -100,15 +100,15 @@ def create_font():
 
 
 def draw_legend(screen, font, detailed_mode: bool):
-    rows = [(PLAYER, "player"), (RAY, "ray")]
+    rows = [(PLAYER, "player")]
     if detailed_mode:
         rows.append((CROSSING_X, "first intersection with a vertical line"))
         rows.append((CROSSING_Y, "first intersection with a horizontal line"))
     rows.append((HIT_POINT, "where the ray hits a wall"))
     if detailed_mode:
-        hint = "press T for free mode"
+        hint = "press M for free mode"
     else:
-        hint = "press T for detailed mode"
+        hint = "press M for detailed mode"
 
     line_height = font.get_linesize() + PANEL_LINE_GAP
     text_width = max(font.size(text)[0] for color, text in rows)

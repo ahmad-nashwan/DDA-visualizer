@@ -38,7 +38,7 @@ def start_visualization(game_map):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_m:
                 detailed_mode = not detailed_mode
                 if detailed_mode:
                     velocity = 0.02
@@ -68,7 +68,7 @@ def start_visualization(game_map):
         render.draw_player(screen, camera, player)
         render.draw_legend(screen, font, detailed_mode)
         render.draw_cursor(screen)
-        pygame.display.set_caption("detailed" if detailed_mode else "free")
+        pygame.display.set_caption("Detailed Mode" if detailed_mode else "Free mode")
         pygame.display.update()
         clock.tick(60)
 
