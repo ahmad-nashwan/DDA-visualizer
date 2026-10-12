@@ -16,6 +16,7 @@ CROSSING_X = pygame.Color("#ff9e64")
 CROSSING_Y = pygame.Color("#bb9af7")
 TEXT = pygame.Color("#c0caf5")
 LABEL = pygame.Color("#565f89")
+LABEL_BRIGHT = pygame.Color("#737aa2")
 
 FONT_SIZE = 16
 PANEL_MARGIN = 16
@@ -98,17 +99,22 @@ def create_font():
     return pygame.font.SysFont("monospace", FONT_SIZE)
 
 
-def draw_legend(screen, font):
-    rows = [
-        (PLAYER, "player"),
-        (CROSSING_X, "first crossing with a vertical line"),
-        (CROSSING_Y, "first crossing with a horizontal line"),
-        (HIT_POINT, "where the ray hits a wall"),
-    ]
+def draw_legend(screen, font, detailed_mode: bool):
+    rows = [(PLAYER, "player"), (RAY, "ray")]
+    if detailed_mode:
+        rows.append((CROSSING_X, "first crossing with a vertical line"))
+        rows.append((CROSSING_Y, "first crossing with a horizontal line"))
+    rows.append((HIT_POINT, "where the ray hits a wall"))
+    if detailed_mode:
+        hint = "press T for free mode"
+    else:
+        hint = "press T for detailed mode"
+
     line_height = font.get_linesize() + PANEL_LINE_GAP
     text_width = max(font.size(text)[0] for color, text in rows)
-    width = PANEL_PADDING * 2 + PANEL_TEXT_COLUMN + text_width
-    height = PANEL_PADDING * 2 + line_height * len(rows) - PANEL_LINE_GAP
+    width = PANEL_PADDING * 2 + max(PANEL_TEXT_COLUMN + text_width, font.size(hint)[0])
+    # one extra line for the hint, and a gap above it
+    height = PANEL_PADDING * 2 + line_height * (len(rows) + 1)
     panel = pygame.Surface((width, height), pygame.SRCALPHA)
     panel.fill((BACKGROUND.r, BACKGROUND.g, BACKGROUND.b, PANEL_OPACITY))
     pygame.draw.rect(panel, WALL_EDGE, panel.get_rect(), 1)
@@ -117,4 +123,6 @@ def draw_legend(screen, font):
         swatch_center = (PANEL_PADDING + PANEL_SWATCH_RADIUS, y + font.get_linesize() // 2)
         pygame.draw.circle(panel, color, swatch_center, PANEL_SWATCH_RADIUS)
         panel.blit(font.render(text, True, TEXT), (PANEL_PADDING + PANEL_TEXT_COLUMN, y))
+    hint_y = PANEL_PADDING + len(rows) * line_height + PANEL_LINE_GAP
+    panel.blit(font.render(hint, True, LABEL_BRIGHT), (PANEL_PADDING, hint_y))
     screen.blit(panel, (PANEL_MARGIN, PANEL_MARGIN))
