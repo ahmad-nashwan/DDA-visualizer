@@ -45,13 +45,13 @@ def start_visualization(game_map):
                 else:
                     velocity = 0.08
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
             player.move(game_map,Direction.UP ,velocity)
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             player.move(game_map, Direction.LEFT, velocity)
-        if keys[pygame.K_s]:
+        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             player.move(game_map, Direction.DOWN, velocity)
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             player.move(game_map, Direction.RIGHT, velocity)
 
         camera.update(player, detailed_mode)
