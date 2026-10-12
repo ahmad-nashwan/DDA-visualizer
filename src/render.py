@@ -17,6 +17,14 @@ CROSSING_Y = pygame.Color("#bb9af7")
 TEXT = pygame.Color("#c0caf5")
 LABEL = pygame.Color("#565f89")
 
+FONT_SIZE = 16
+PANEL_MARGIN = 16
+PANEL_PADDING = 14
+PANEL_SWATCH_RADIUS = 5
+PANEL_TEXT_COLUMN = 22
+PANEL_LINE_GAP = 8
+PANEL_OPACITY = 170  # 0 is invisible, 255 is solid
+
 class Camera:
     def __init__(self, cell_size, screen_width, screen_height):
         self.cell_size = cell_size
@@ -63,8 +71,10 @@ def draw_grid(screen, camera: Camera, grid):
             if grid[row][col] == 1:
                 pygame.draw.rect(screen, WALL_EDGE, rect, 2)
 
+
 def draw_player(screen, camera: Camera, player: Player):
     pygame.draw.circle(screen, PLAYER, camera.to_pixels(player.pos.x, player.pos.y), 8)
+
 
 def draw_cursor(screen):
     x, y = pygame.mouse.get_pos()
@@ -83,3 +93,28 @@ def draw_crossing(screen, camera: Camera, player: Player, distance, color):
     x = player.pos.x + direction.x * distance
     y = player.pos.y + direction.y * distance
     pygame.draw.circle(screen, color, camera.to_pixels(x, y), 6)
+
+def create_font():
+    return pygame.font.SysFont("monospace", FONT_SIZE)
+
+
+def draw_legend(screen, font):
+    rows = [
+        (PLAYER, "player"),
+        (CROSSING_X, "first crossing with a vertical line"),
+        (CROSSING_Y, "first crossing with a horizontal line"),
+        (HIT_POINT, "where the ray hits a wall"),
+    ]
+    line_height = font.get_linesize() + PANEL_LINE_GAP
+    text_width = max(font.size(text)[0] for color, text in rows)
+    width = PANEL_PADDING * 2 + PANEL_TEXT_COLUMN + text_width
+    height = PANEL_PADDING * 2 + line_height * len(rows) - PANEL_LINE_GAP
+    panel = pygame.Surface((width, height), pygame.SRCALPHA)
+    panel.fill((BACKGROUND.r, BACKGROUND.g, BACKGROUND.b, PANEL_OPACITY))
+    pygame.draw.rect(panel, WALL_EDGE, panel.get_rect(), 1)
+    for i, (color, text) in enumerate(rows):
+        y = PANEL_PADDING + i * line_height
+        swatch_center = (PANEL_PADDING + PANEL_SWATCH_RADIUS, y + font.get_linesize() // 2)
+        pygame.draw.circle(panel, color, swatch_center, PANEL_SWATCH_RADIUS)
+        panel.blit(font.render(text, True, TEXT), (PANEL_PADDING + PANEL_TEXT_COLUMN, y))
+    screen.blit(panel, (PANEL_MARGIN, PANEL_MARGIN))

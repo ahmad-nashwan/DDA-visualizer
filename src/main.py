@@ -26,6 +26,7 @@ def start_visualization(game_map):
     screen = pygame.display.set_mode((camera.screen_width, camera.screen_height))
     pygame.display.set_caption("DDA visualizer")
     clock = pygame.time.Clock()
+    font = render.create_font()
     player = Player(set_starting_pos(game_map))
     pygame.mouse.set_visible(False)
     velocity = 0.02
@@ -60,12 +61,14 @@ def start_visualization(game_map):
         ray = dda(player, game_map)
         render.draw_line_of_sight(screen, camera, player, ray.hit)
         render.draw_hit_point(screen, camera, ray.hit)
-        render.draw_cursor(screen)
-        if detailed_mode and ray.first_distX:
+        if detailed_mode and ray.first_distX is not None:
             render.draw_crossing(screen, camera, player, ray.first_distX, render.CROSSING_X)
-        if detailed_mode and ray.first_distY:
+        if detailed_mode and ray.first_distY is not None:
             render.draw_crossing(screen, camera, player, ray.first_distY, render.CROSSING_Y)
         render.draw_player(screen, camera, player)
+        if detailed_mode:
+            render.draw_legend(screen, font)
+        render.draw_cursor(screen)
         pygame.display.set_caption("detailed" if detailed_mode else "free")
         pygame.display.update()
         clock.tick(60)
