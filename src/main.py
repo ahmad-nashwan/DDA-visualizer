@@ -2,7 +2,7 @@ import pygame
 import random
 import render
 from core import Vec2D, GameMap, Player, Direction
-from dda import dda, RayResult
+from dda import dda
 
 
 def set_starting_pos(game_map: GameMap):

@@ -1,5 +1,4 @@
 import math
-from dataclasses import dataclass
 from core import Player, GameMap
 
 class RayResult:

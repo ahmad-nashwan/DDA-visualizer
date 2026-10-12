@@ -1,5 +1,5 @@
 import pygame
-from core import Player, GameMap
+from core import Player
 
 # cool collor pallete
 BACKGROUND = pygame.Color("#16161e")
