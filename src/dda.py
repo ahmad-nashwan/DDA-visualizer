@@ -20,7 +20,6 @@ def sign(number):
 def dda(player: Player, game_map: GameMap):    
     # we must calculate the distance if y += 1 and if x += 1
     # if the denominator is zero this means we're moving in a perfect horizontal or vertical movement
-    # bug 1 here
     if player.dir.x == 0 and player.dir.y == 0:
         return (RayResult((player.pos.x, player.pos.y), None, None, None))
     if player.dir.y == 0:
@@ -41,13 +40,11 @@ def dda(player: Player, game_map: GameMap):
         distY = fractional_pos.y * distBetweenRows
     else:
         distY = (1 - fractional_pos.y) * distBetweenRows
-    # lets capture the first intersection points so we can draw them...
     # the ray starts at the players position
     first_distX = first_distY = None
     mapX = int(player.pos.x)
     mapY = int(player.pos.y)
 
-    # Fix 2: Cache the step directions before the loop
     stepX = sign(player.dir.x)
     stepY = sign(player.dir.y)
     side = None

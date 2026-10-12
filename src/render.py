@@ -113,7 +113,6 @@ def draw_legend(screen, font, detailed_mode: bool):
     line_height = font.get_linesize() + PANEL_LINE_GAP
     text_width = max(font.size(text)[0] for color, text in rows)
     width = PANEL_PADDING * 2 + max(PANEL_TEXT_COLUMN + text_width, font.size(hint)[0])
-    # one extra line for the hint, and a gap above it
     height = PANEL_PADDING * 2 + line_height * (len(rows) + 1)
     panel = pygame.Surface((width, height), pygame.SRCALPHA)
     panel.fill((BACKGROUND.r, BACKGROUND.g, BACKGROUND.b, PANEL_OPACITY))
