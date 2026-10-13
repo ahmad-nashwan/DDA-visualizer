@@ -40,5 +40,3 @@ You need Python 3 and `make`.
 make setup
 make run
 ```
-
-That's all.
